@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'État de Droit — Fiche EMC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose:#f2a7b2; --rose-d:#d9697a; --lav:#c3aee6; --lav-d:#9b82d4;
+  --mint:#9dd6c5; --mint-d:#5eb89e; --peach:#f9c9a0; --gold:#e8c97a;
+  --cream:#fdf6ee; --ink:#1e1520; --ink-s:#4a3550; --border:rgba(180,150,200,.25);
+  --card:rgba(255,255,255,.82); --shadow:0 8px 40px rgba(100,50,80,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;min-height:100vh}
+
+/* BG */
+body::before{content:'';position:fixed;inset:0;z-index:-2;
+  background:radial-gradient(ellipse 70% 60% at 5% 5%,#fde8ef,transparent 55%),
+  radial-gradient(ellipse 60% 50% at 95% 90%,#e8e0f7,transparent 55%),
+  radial-gradient(ellipse 50% 45% at 50% 50%,#e8f7f3,transparent 60%),#fdf6ee}
+.blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none;z-index:-1;animation:fblob 14s ease-in-out infinite}
+.b1{width:500px;height:500px;background:var(--rose);top:-150px;left:-150px}
+.b2{width:380px;height:380px;background:var(--lav);bottom:-100px;right:-100px;animation-delay:-5s}
+.b3{width:280px;height:280px;background:var(--mint);top:40%;left:55%;animation-delay:-9s}
+@keyframes fblob{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(25px,-18px) scale(1.04)}70%{transform:translate(-18px,14px) scale(.97)}}
+
+/* PROGRESS BAR */
+#progressBar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--rose-d),var(--lav-d),var(--mint-d));width:0%;transition:width .4s ease;z-index:200;border-radius:0 2px 2px 0}
+
+/* TABS NAV */
+.tabs-nav{position:sticky;top:0;z-index:100;background:rgba(253,246,238,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:0 16px;display:flex;overflow-x:auto;scrollbar-width:none}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;padding:16px 20px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--ink-s);cursor:pointer;position:relative;transition:color .25s;white-space:nowrap}
+.tab-btn::after{content:'';position:absolute;bottom:0;left:20px;right:20px;height:2px;background:var(--rose-d);border-radius:2px 2px 0 0;transform:scaleX(0);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.tab-btn.active{color:var(--rose-d);font-weight:600}
+.tab-btn.active::after{transform:scaleX(1)}
+.tab-btn:hover{color:var(--ink)}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 52px);padding:48px 24px 80px;max-width:860px;margin:0 auto;animation:pageIn .45s cubic-bezier(.34,1.1,.64,1) both}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* PAGE HERO */
+.page-hero{margin-bottom:44px}
+.page-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-s);margin-bottom:14px}
+.page-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.6rem);font-weight:900;line-height:1.05;color:var(--ink)}
+.page-title em{font-style:italic;color:var(--rose-d)}
+.page-sub{margin-top:10px;font-size:.95rem;line-height:1.65;color:var(--ink-s);max-width:580px}
+
+/* CARDS GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-bottom:32px}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px;backdrop-filter:blur(12px);transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;cursor:default;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(242,167,178,.15),transparent 60%)}
+.card:hover{transform:translateY(-5px);box-shadow:0 18px 45px rgba(100,50,80,.13)}
+.card:hover::before{opacity:1}
+.card-icon{font-size:1.8rem;margin-bottom:12px}
+.card-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+.card-desc{font-size:.86rem;line-height:1.65;color:var(--ink-s)}
+.ct-rose{border-top:3px solid var(--rose)}
+.ct-lav{border-top:3px solid var(--lav)}
+.ct-mint{border-top:3px solid var(--mint)}
+.ct-peach{border-top:3px solid var(--peach)}
+.ct-gold{border-top:3px solid var(--gold)}
+
+/* DEF ITEMS */
+.defs{display:grid;gap:14px}
+.def-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 26px;display:grid;grid-template-columns:110px 1fr;gap:20px;align-items:start;backdrop-filter:blur(10px);transition:transform .25s,box-shadow .25s;cursor:pointer}
+.def-item:hover{transform:translateX(6px);box-shadow:-3px 0 0 var(--rose-d),0 6px 24px rgba(100,50,80,.08)}
+.def-term{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--rose-d);line-height:1.3}
+.def-body{font-size:.88rem;line-height:1.7;color:var(--ink-s)}
+
+/* HIGHLIGHT + POPUP */
+.hl{background:linear-gradient(transparent 60%,rgba(242,167,178,.45) 60%);cursor:help;border-radius:3px;transition:background .2s;position:relative}
+.hl:hover{background:linear-gradient(transparent 50%,rgba(242,167,178,.7) 50%)}
+.tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:12px;padding:10px 14px;font-size:.78rem;line-height:1.5;width:230px;z-index:500;pointer-events:none;opacity:0;transition:opacity .2s;font-family:'DM Sans',sans-serif;font-weight:400;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.hl:hover .tooltip{opacity:1}
+
+/* PYRAMID */
+.pyr-wrap{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:36px 24px 28px;backdrop-filter:blur(12px);margin-bottom:24px}
+.pyr-title{font-family:'Playfair Display',serif;font-size:1.2rem;text-align:center;margin-bottom:28px;color:var(--ink)}
+.pyr-title span{color:var(--rose-d)}
+.pyr{display:flex;flex-direction:column;align-items:center;gap:8px}
+.pl{border-radius:14px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;position:relative}
+.pl:hover{transform:scale(1.03);box-shadow:0 8px 28px rgba(100,50,80,.18)}
+.p1{width:38%;background:linear-gradient(135deg,var(--rose),var(--rose-d));color:#fff}
+.p2{width:56%;background:linear-gradient(135deg,var(--lav),var(--lav-d));color:#fff}
+.p3{width:74%;background:linear-gradient(135deg,var(--mint),var(--mint-d));color:#fff}
+.p4{width:92%;background:linear-gradient(135deg,var(--peach),#e8a96a);color:#fff}
+.pl-txt{flex:1}
+.pl-label{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:700;text-align:center}
+.pl-sub{font-size:.72rem;opacity:.85;text-align:center;margin-top:2px}
+.pl-num{font-family:'DM Mono',monospace;font-size:1.4rem;opacity:.35}
+.pyr-info{background:rgba(255,255,255,.65);border:1px solid var(--border);border-radius:14px;padding:16px 20px;font-size:.85rem;line-height:1.6;color:var(--ink-s);display:none;margin-top:4px;animation:pageIn .3s both}
+.pyr-info.show{display:block}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:30px}
+.timeline::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,var(--rose),var(--lav),var(--mint));border-radius:4px}
+.tl-item{position:relative;margin-bottom:28px;opacity:0;transform:translateX(-10px);transition:all .5s ease}
+.tl-item.vis{opacity:1;transform:translateX(0)}
+.tl-item::before{content:'';position:absolute;left:-34px;top:6px;width:10px;height:10px;border-radius:50%;background:#fff;border:2.5px solid var(--rose-d);transition:transform .25s,background .25s}
+.tl-item:hover::before{transform:scale(1.5);background:var(--rose-d)}
+.tl-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--rose-d);letter-spacing:.1em;margin-bottom:3px}
+.tl-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:5px}
+.tl-body{font-size:.86rem;line-height:1.65;color:var(--ink-s)}
+
+/* RECAP BOX */
+.recap{background:linear-gradient(135deg,rgba(242,167,178,.2),rgba(195,174,230,.2));border:1.5px solid var(--rose);border-radius:18px;padding:24px 28px;margin-top:36px}
+.recap-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--rose-d);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.recap ul{list-style:none;display:grid;gap:8px}
+.recap li{font-size:.87rem;color:var(--ink-s);display:flex;gap:10px;align-items:flex-start;line-height:1.55}
+.recap li::before{content:'✦';color:var(--rose-d);flex-shrink:0;font-size:.7rem;margin-top:3px}
+
+/* FLASHCARDS */
+.flash-hint{font-size:.85rem;color:var(--ink-s);margin-bottom:20px}
+.flash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.fc{height:155px;perspective:1000px;cursor:pointer}
+.fc-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.34,1.1,.64,1)}
+.fc.flip .fc-inner{transform:rotateY(180deg)}
+.fc-f,.fc-b{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.fc-f{background:var(--card);border:1px solid var(--border);backdrop-filter:blur(10px)}
+.fc-term{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--ink)}
+.fc-tap{font-size:10px;color:var(--ink-s);opacity:.4;margin-top:8px;letter-spacing:.05em}
+.fc-b{background:var(--ink);transform:rotateY(180deg)}
+.fc-def{font-size:.78rem;line-height:1.6;color:#fff}
+
+/* QUIZ */
+.quiz-box{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:32px;backdrop-filter:blur(12px)}
+.quiz-hdr{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--ink);margin-bottom:4px}
+.quiz-sub{font-size:.85rem;color:var(--ink-s);margin-bottom:24px}
+.q-prog{display:flex;gap:6px;margin-bottom:22px}
+.q-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s}
+.q-dot.done{background:var(--mint-d)}
+.q-dot.cur{background:var(--rose-d)}
+.q-text{font-size:.93rem;font-weight:500;color:var(--ink);margin-bottom:14px;line-height:1.5}
+.q-text .qtag{font-family:'DM Mono',monospace;font-size:10px;background:var(--rose-d);color:#fff;border-radius:100px;padding:2px 9px;margin-right:8px}
+.q-opts{display:grid;gap:9px;margin-bottom:18px}
+.q-opt{background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:11px 16px;font-size:.86rem;cursor:pointer;transition:all .2s;text-align:left;font-family:'DM Sans',sans-serif;color:var(--ink)}
+.q-opt:hover:not(:disabled){border-color:var(--rose);background:#fff5f7}
+.q-opt.ok{background:#eaf9f0;border-color:var(--mint-d);color:#1f6e4a}
+.q-opt.ko{background:#fdf0f2;border-color:var(--rose-d);color:#8c2535}
+.q-fb{display:none;padding:12px 16px;border-radius:12px;font-size:.84rem;line-height:1.5;margin-bottom:14px}
+.q-fb.show{display:block}
+.q-fb.ok{background:#eaf9f0;color:#1f6e4a}
+.q-fb.ko{background:#fdf0f2;color:#8c2535}
+.q-next{background:var(--ink);color:#fff;border:none;border-radius:12px;padding:11px 26px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:transform .2s,background .2s;display:none}
+.q-next.show{display:inline-flex}
+.q-next:hover{transform:translateY(-2px);background:var(--rose-d)}
+.q-score{text-align:center;padding:16px 0}
+.q-score-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--ink)}
+.q-score-lbl{font-size:.9rem;color:var(--ink-s);margin-bottom:20px}
+
+/* SYNTHESE */
+.loop-wrap{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:32px 0}
+.loop-item{background:#fff;border-radius:18px;padding:18px 16px;font-size:.83rem;font-weight:500;color:var(--ink);border:1px solid var(--border);transition:transform .25s,box-shadow .25s;text-align:center;max-width:140px;cursor:default}
+.loop-item:hover{transform:scale(1.06);box-shadow:0 8px 28px rgba(100,50,80,.12)}
+.loop-item .li{font-size:1.7rem;display:block;margin-bottom:6px}
+.loop-arrow{font-size:1.3rem;color:var(--rose-d);opacity:.65}
+.synth-banner{background:linear-gradient(135deg,rgba(242,167,178,.28),rgba(195,174,230,.28));border:1.5px solid var(--rose);border-radius:22px;padding:36px;text-align:center}
+.synth-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--ink);margin-bottom:8px}
+.synth-sub{font-size:.9rem;color:var(--ink-s);margin-bottom:28px}
+
+/* HOME HERO */
+.home-hero{text-align:center;padding:60px 0 40px}
+.home-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,8vw,5.5rem);font-weight:900;line-height:1;color:var(--ink)}
+.home-hero h1 em{font-style:italic;color:var(--rose-d);display:block}
+.home-pb{margin-top:28px;background:rgba(255,255,255,.75);border:1.5px solid var(--rose);border-radius:16px;padding:18px 26px;font-size:.92rem;line-height:1.7;color:var(--ink-s);max-width:620px;margin-left:auto;margin-right:auto}
+.home-pb strong{font-family:'Playfair Display',serif;color:var(--rose-d);font-size:.98rem}
+.home-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px}
+.home-chip{background:rgba(255,255,255,.8);border:1px solid var(--border);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:500;color:var(--ink-s);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px}
+.home-chip:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px)}
+.home-start{margin-top:36px;background:var(--rose-d);color:#fff;border:none;border-radius:14px;padding:14px 34px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:transform .25s,box-shadow .25s;box-shadow:0 4px 18px rgba(217,105,122,.35)}
+.home-start:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(217,105,122,.5)}
+
+/* PROGRESS STEPS */
+.progress-steps{display:flex;align-items:center;gap:0;margin-bottom:36px;overflow-x:auto;scrollbar-width:none}
+.progress-steps::-webkit-scrollbar{display:none}
+.ps{display:flex;align-items:center;gap:0;flex-shrink:0}
+.ps-dot{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--ink-s);transition:all .3s;flex-shrink:0}
+.ps-dot.done{background:var(--mint-d);color:#fff}
+.ps-dot.cur{background:var(--rose-d);color:#fff;box-shadow:0 0 0 4px rgba(217,105,122,.2)}
+.ps-line{width:32px;height:2px;background:var(--border);flex-shrink:0;transition:background .3s}
+.ps-line.done{background:var(--mint-d)}
+.ps-label{font-size:9px;color:var(--ink-s);margin-top:5px;text-align:center;max-width:60px;line-height:1.3}
+.ps-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+
+/* NEXT/PREV BTNS */
+.page-nav{display:flex;justify-content:space-between;margin-top:48px;gap:12px}
+.pnav-btn{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--ink-s);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px)}
+.pnav-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px)}
+.pnav-btn.primary{background:var(--rose-d);color:#fff;border-color:var(--rose-d)}
+.pnav-btn.primary:hover{background:#c4566a;transform:translateY(-2px)}
+.pnav-btn:disabled{opacity:.3;cursor:not-allowed;transform:none !important}
+
+/* STAGGER REVEAL */
+.sr{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.sr.vis{opacity:1;transform:translateY(0)}
+
+@media(max-width:600px){
+  .def-item{grid-template-columns:1fr;gap:6px}
+  .loop-arrow{display:none}
+  .p1,.p2,.p3,.p4{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+<div id="progressBar"></div>
+
+<!-- TABS -->
+<nav class="tabs-nav" id="tabsNav">
+  <button class="tab-btn active" data-tab="home">🏠 Accueil</button>
+  <button class="tab-btn" data-tab="def">📖 Définitions</button>
+  <button class="tab-btn" data-tab="sec">🛡️ Sécurité</button>
+  <button class="tab-btn" data-tab="lib">⚖️ Libertés</button>
+  <button class="tab-btn" data-tab="kels">🔺 Pyramide</button>
+  <button class="tab-btn" data-tab="jus">🏛️ Justice</button>
+  <button class="tab-btn" data-tab="ind">🔒 Indépendance</button>
+  <button class="tab-btn" data-tab="flash">🃏 Flashcards</button>
+  <button class="tab-btn" data-tab="quiz">❓ Quiz</button>
+  <button class="tab-btn" data-tab="synth">🔄 Synthèse</button>
+</nav>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div class="page active" id="page-home">
+  <div class="home-hero sr">
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-d);font-weight:600;margin-bottom:10px">EMC · Droit public · Lycée</div>
+    <h1>L'État de <em>Droit</em></h1>
+    <p style="margin-top:14px;font-size:.95rem;color:var(--ink-s);max-width:480px;margin-left:auto;margin-right:auto;line-height:1.65">Pourquoi la loi protège-t-elle les citoyens ? Une fiche de révision interactive et complète.</p>
+    <div class="home-pb"><strong>❓ Problématique :</strong> Comment l'État de droit, à travers ses lois et ses institutions, parvient-il à garantir la <em>justice</em>, la <em>sécurité</em> et l'<em>égalité</em> au sein de la société ?</div>
+    <div class="home-chips">
+      <div class="home-chip" onclick="goTab('def')">📖 Définitions</div>
+      <div class="home-chip" onclick="goTab('sec')">🛡️ Sécurité</div>
+      <div class="home-chip" onclick="goTab('lib')">⚖️ Libertés</div>
+      <div class="home-chip" onclick="goTab('kels')">🔺 Pyramide</div>
+      <div class="home-chip" onclick="goTab('jus')">🏛️ Justice</div>
+      <div class="home-chip" onclick="goTab('ind')">🔒 Indépendance</div>
+      <div class="home-chip" onclick="goTab('flash')">🃏 Flashcards</div>
+      <div class="home-chip" onclick="goTab('quiz')">❓ Quiz</div>
+    </div>
+    <button class="home-start" onclick="goTab('def')">Commencer le cours →</button>
+  </div>
+</div>
+
+<!-- ═══════════ DÉFINITIONS ═══════════ -->
+<div class="page" id="page-def">
+  <div class="page-hero sr">
+    <div class="page-chip">📖 Introduction</div>
+    <h1 class="page-title">Définitions <em>fondamentales</em></h1>
+    <p class="page-sub">Avant tout, les fondations. Ces 3 définitions sont à connaître par cœur.</p>
+  </div>
+
+  <div class="defs sr">
+    <div class="def-item">
+      <div class="def-term">État de droit</div>
+      <div class="def-body">Système politique et juridique dans lequel <strong>toutes les personnes et institutions</strong>, y compris l'État lui-même, sont soumises à la loi. Le pouvoir de l'État y est strictement encadré pour garantir les <span class="hl">libertés individuelles<span class="tooltip">Droits fondamentaux qui appartiennent à chaque individu : liberté d'expression, de conscience, de réunion…</span></span>.</div>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Loi</div>
+      <div class="def-body">Règle établie par une autorité compétente (le <span class="hl">Parlement<span class="tooltip">Assemblée nationale + Sénat. Le Parlement vote les lois en France.</span></span>). Elle est <strong>universelle</strong> (s'applique à tous) et <strong>obligatoire</strong> — « nul n'est censé ignorer la loi ». Elle fixe des droits et des obligations.</div>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Citoyen</div>
+      <div class="def-body">Acteur à la base de la création des lois. Par le biais des <strong>élections</strong> et du processus <span class="hl">démocratique<span class="tooltip">Régime politique où le pouvoir appartient au peuple, qui l'exerce directement ou par ses représentants.</span></span>, c'est le citoyen qui donne sa légitimité à la loi.</div>
+    </div>
+  </div>
+
+  <div class="recap sr">
+    <div class="recap-title">🧠 À retenir</div>
+    <ul>
+      <li>L'État de droit = même la loi s'applique à l'État lui-même.</li>
+      <li>La loi est universelle : elle s'applique à <em>tout le monde</em> sans exception.</li>
+      <li>Sans citoyen → pas de légitimité → pas de démocratie.</li>
+    </ul>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" disabled>← Précédent</button>
+    <button class="pnav-btn primary" onclick="goTab('sec')">Chapitre I — Sécurité →</button>
+  </div>
+</div>
+
+<!-- ═══════════ SÉCURITÉ ═══════════ -->
+<div class="page" id="page-sec">
+  <div class="page-hero sr">
+    <div class="page-chip">🛡️ Chapitre I</div>
+    <h1 class="page-title">La sécurité <em>& la défense</em></h1>
+    <p class="page-sub">La première mission de la loi : assurer la sécurité physique et juridique des citoyens contre l'oppression et le chaos.</p>
+  </div>
+
+  <div class="grid sr">
+    <div class="card ct-rose" onmousemove="glow(event,this)">
+      <div class="card-icon">🏥</div>
+      <div class="card-title">Santé & Environnement</div>
+      <div class="card-desc">La loi <strong>interdit ou limite</strong> les substances toxiques, protégeant la santé collective et l'environnement.</div>
+    </div>
+    <div class="card ct-lav" onmousemove="glow(event,this)">
+      <div class="card-icon">🏛️</div>
+      <div class="card-title">Ordre public</div>
+      <div class="card-desc">Contrôle et sécurisation des <span class="hl">rassemblements<span class="tooltip">Ex : une manifestation doit être déclarée en préfecture. La loi encadre ce droit pour éviter les débordements.</span></span> dans l'espace public pour garantir la paix sociale.</div>
+    </div>
+    <div class="card ct-mint" onmousemove="glow(event,this)">
+      <div class="card-icon">📢</div>
+      <div class="card-title">Espace médiatique</div>
+      <div class="card-desc">Sanction de l'<span class="hl">injure<span class="tooltip">Terme offensant sans allégation de fait. Puni par la loi sur la liberté de la presse de 1881.</span></span>, de la <span class="hl">diffamation<span class="tooltip">Allégation d'un fait faux portant atteinte à l'honneur d'une personne. Punie pénalement.</span></span> et de l'incitation à la haine.</div>
+    </div>
+    <div class="card ct-peach" onmousemove="glow(event,this)">
+      <div class="card-icon">🔒</div>
+      <div class="card-title">Dissuasion pénale</div>
+      <div class="card-desc">Le <span class="hl">Code pénal<span class="tooltip">Recueil de toutes les infractions pénales (crimes, délits, contraventions) et leurs sanctions en France.</span></span> définit que tuer est illégal avec des peines de prison. Cet effet <strong>dissuasif</strong> régule la violence dans la société.</div>
+    </div>
+  </div>
+
+  <div class="recap sr">
+    <div class="recap-title">🧠 À retenir</div>
+    <ul>
+      <li>La loi crée un cadre <strong>prévisible</strong> = sécurité juridique pour tous.</li>
+      <li>Pas de loi = pas de sanction = chaos (état de nature).</li>
+      <li>La sanction a deux effets : <strong>punir</strong> le coupable ET <strong>dissuader</strong> les autres.</li>
+    </ul>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('def')">← Définitions</button>
+    <button class="pnav-btn primary" onclick="goTab('lib')">Chapitre II — Libertés →</button>
+  </div>
+</div>
+
+<!-- ═══════════ LIBERTÉS ═══════════ -->
+<div class="page" id="page-lib">
+  <div class="page-hero sr">
+    <div class="page-chip">⚖️ Chapitre II</div>
+    <h1 class="page-title">L'égalité <em>des libertés</em></h1>
+    <p class="page-sub">La loi est le principal bouclier de nos libertés et veille à ce qu'elles soient les mêmes pour tous.</p>
+  </div>
+
+  <div class="grid sr">
+    <div class="card ct-rose" onmousemove="glow(event,this)">
+      <div class="card-icon">📜</div>
+      <div class="card-title">Constitution du 4 oct. 1958</div>
+      <div class="card-desc">Place la liberté comme <strong>valeur suprême</strong> de la République. S'appuie sur le <span class="hl">bloc de constitutionnalité<span class="tooltip">Ensemble de textes ayant valeur constitutionnelle : Constitution 1958 + DDHC 1789 + Préambule 1946.</span></span>.</div>
+    </div>
+    <div class="card ct-lav" onmousemove="glow(event,this)">
+      <div class="card-icon">🗺️</div>
+      <div class="card-title">DDHC de 1789</div>
+      <div class="card-desc">La <span class="hl">Déclaration des Droits de l'Homme et du Citoyen<span class="tooltip">Texte fondateur de la Révolution française, proclamé en 1789. Il garantit liberté, propriété, sûreté et résistance à l'oppression.</span></span>. Texte fondateur des libertés françaises.</div>
+    </div>
+    <div class="card ct-mint" onmousemove="glow(event,this)">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Préambule de 1946</div>
+      <div class="card-desc">Complète la DDHC avec des droits économiques et sociaux : droit au travail, à la santé, à l'éducation…</div>
+    </div>
+  </div>
+
+  <div class="defs sr">
+    <div class="def-item">
+      <div class="def-term">Libertés garanties</div>
+      <div class="def-body"><strong>Expression · Réunion · Association · Conscience · Enseignement · Information · Opinion</strong><br>— ainsi que les principes d'<span class="hl">égalité<span class="tooltip">Tous les citoyens sont égaux devant la loi, sans distinction d'origine, de race ou de religion.</span></span> et de <span class="hl">laïcité<span class="tooltip">La laïcité garantit la neutralité de l'État face aux religions et la liberté de conscience de chacun.</span></span>.</div>
+    </div>
+  </div>
+
+  <div class="recap sr">
+    <div class="recap-title">🧠 À retenir</div>
+    <ul>
+      <li>La loi ne fait pas que contraindre — elle <strong>protège</strong> aussi nos libertés.</li>
+      <li>DDHC 1789 + Préambule 1946 = le socle de nos droits fondamentaux.</li>
+      <li>Égalité = mêmes libertés pour <em>tous</em>, sans exception.</li>
+    </ul>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('sec')">← Sécurité</button>
+    <button class="pnav-btn primary" onclick="goTab('kels')">Pyramide de Kelsen →</button>
+  </div>
+</div>
+
+<!-- ═══════════ KELSEN ═══════════ -->
+<div class="page" id="page-kels">
+  <div class="page-hero sr">
+    <div class="page-chip">🔺 Concept-clé</div>
+    <h1 class="page-title">La Pyramide <em>de Kelsen</em></h1>
+    <p class="page-sub">Théorisée par Hans Kelsen en 1934 — cliquez sur chaque niveau pour en savoir plus.</p>
+  </div>
+
+  <div class="pyr-wrap sr">
+    <div class="pyr-title">La hiérarchie des normes — <span>clique sur un niveau !</span></div>
+    <div class="pyr">
+      <div class="pl p1" onclick="togglePyr('pyr1')">
+        <div class="pl-num">①</div>
+        <div class="pl-txt">
+          <div class="pl-label">Constitution</div>
+          <div class="pl-sub">+ bloc de constitutionnalité</div>
+        </div>
+      </div>
+      <div class="pyr-info" id="pyr1">📌 <strong>Loi suprême.</strong> Tout lui est soumis. Contient la DDHC 1789 et le Préambule 1946. Elle ne peut être modifiée que par référendum ou par le Congrès (Parlement réuni).</div>
+
+      <div class="pl p2" onclick="togglePyr('pyr2')">
+        <div class="pl-num">②</div>
+        <div class="pl-txt">
+          <div class="pl-label">Traités internationaux</div>
+          <div class="pl-sub">Convention européenne des droits de l'homme…</div>
+        </div>
+      </div>
+      <div class="pyr-info" id="pyr2">🌍 <strong>Valeur supérieure aux lois.</strong> Ex : La Convention EDH (art. 6 sur le procès équitable). Une loi française ne peut pas contredire un traité ratifié par la France.</div>
+
+      <div class="pl p3" onclick="togglePyr('pyr3')">
+        <div class="pl-num">③</div>
+        <div class="pl-txt">
+          <div class="pl-label">Lois</div>
+          <div class="pl-sub">Votées par le Parlement</div>
+        </div>
+      </div>
+      <div class="pyr-info" id="pyr3">📜 <strong>Votées par l'Assemblée nationale et le Sénat.</strong> Contrôlées par le Conseil Constitutionnel. Elles doivent respecter la Constitution ET les traités internationaux.</div>
+
+      <div class="pl p4" onclick="togglePyr('pyr4')">
+        <div class="pl-num">④</div>
+        <div class="pl-txt">
+          <div class="pl-label">Règlements</div>
+          <div class="pl-sub">Décrets, arrêtés — pouvoir exécutif / maires</div>
+        </div>
+      </div>
+      <div class="pyr-info" id="pyr4">📋 <strong>Niveau le plus bas.</strong> Pris par le gouvernement (décrets) ou les maires (arrêtés). Doivent respecter <em>toutes</em> les normes au-dessus d'eux.</div>
+    </div>
+  </div>
+
+  <div class="defs sr">
+    <div class="def-item">
+      <div class="def-term">Règle d'or</div>
+      <div class="def-body">Une norme inférieure doit <strong>toujours</strong> être conforme aux normes supérieures. Ainsi, une simple loi ne peut jamais contredire le principe d'égalité inscrit dans la Constitution. C'est la garantie majeure contre l'arbitraire.</div>
+    </div>
+  </div>
+
+  <div class="recap sr">
+    <div class="recap-title">🧠 À retenir</div>
+    <ul>
+      <li>4 niveaux : Constitution → Traités → Lois → Règlements.</li>
+      <li>Norme inférieure TOUJOURS conforme à la norme supérieure.</li>
+      <li>C'est ce qui empêche un gouvernement de supprimer une liberté par une simple loi.</li>
+    </ul>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('lib')">← Libertés</button>
+    <button class="pnav-btn primary" onclick="goTab('jus')">Chapitre III — Justice →</button>
+  </div>
+</div>
+
+<!-- ═══════════ JUSTICE ═══════════ -->
+<div class="page" id="page-jus">
+  <div class="page-hero sr">
+    <div class="page-chip">🏛️ Chapitre III</div>
+    <h1 class="page-title">L'accès <em>au droit</em></h1>
+    <p class="page-sub">La loi instaure des procédures pacifiques pour résoudre les conflits entre individus.</p>
+  </div>
+
+  <div class="grid sr">
+    <div class="card ct-gold" onmousemove="glow(event,this)">
+      <div class="card-icon">👨‍⚖️</div>
+      <div class="card-title">Le rôle du juge</div>
+      <div class="card-desc">Le juge <strong>interprète</strong> la loi — qui reflète les valeurs sociales — pour l'appliquer à chaque cas particulier et rétablir la justice. Ce n'est pas une simple lecture mécanique.</div>
+    </div>
+    <div class="card ct-mint" onmousemove="glow(event,this)">
+      <div class="card-icon">🆓</div>
+      <div class="card-title">Accès gratuit au droit</div>
+      <div class="card-desc">Toute personne peut bénéficier <strong>gratuitement</strong> et <strong>confidentiellement</strong> d'informations juridiques, de consultations, ou d'aide pour rédiger des actes.</div>
+    </div>
+  </div>
+
+  <div class="timeline sr">
+    <div class="tl-item">
+      <div class="tl-date">10 juillet 1991</div>
+      <div class="tl-title">Loi relative à l'aide juridique</div>
+      <div class="tl-body">Loi fondatrice garantissant l'accès au droit pour tous. Reconnue comme <em>service public de la justice</em> depuis 2016.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Domaines couverts</div>
+      <div class="tl-title">Famille · Logement · Travail · Consommation · Pénal</div>
+      <div class="tl-body">Divorce, expulsions, licenciements, litiges de consommation… Le droit accompagne tous les aspects de la vie quotidienne.</div>
+    </div>
+  </div>
+
+  <div class="recap sr">
+    <div class="recap-title">🧠 À retenir</div>
+    <ul>
+      <li>L'accès au droit est un <strong>principe fondamental de citoyenneté</strong>.</li>
+      <li>Sans accès au droit, les libertés proclamées restent théoriques.</li>
+      <li>Loi de 1991 = aide juridictionnelle gratuite pour les personnes sans ressources.</li>
+    </ul>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('kels')">← Pyramide</button>
+    <button class="pnav-btn primary" onclick="goTab('ind')">Chapitre IV — Indépendance →</button>
+  </div>
+</div>
+
+<!-- ═══════════ INDÉPENDANCE ═══════════ -->
+<div class="page" id="page-ind">
+  <div class="page-hero sr">
+    <div class="page-chip">🔒 Chapitre IV</div>
+    <h1 class="page-title">L'indépendance <em>de la justice</em></h1>
+    <p class="page-sub">Une loi juste perd toute utilité si elle est appliquée de manière arbitraire.</p>
+  </div>
+
+  <div class="defs sr" style="margin-bottom:28px">
+    <div class="def-item">
+      <div class="def-term">Séparation des pouvoirs</div>
+      <div class="def-body">La justice doit être séparée du <span class="hl">législatif<span class="tooltip">Pouvoir qui écrit les lois = le Parlement (Assemblée nationale + Sénat).</span></span> (ceux qui écrivent la loi) et de l'<span class="hl">exécutif<span class="tooltip">Pouvoir qui dirige le pays = le gouvernement et le Président de la République.</span></span> (ceux qui dirigent). Garantit des juges impartiaux — art. 6 CEDH.</div>
+    </div>
+  </div>
+
+  <div class="timeline sr">
+    <div class="tl-item">
+      <div class="tl-date">Constitution 1958 — Art. 64</div>
+      <div class="tl-title">Garantie présidentielle</div>
+      <div class="tl-body">Le Président de la République est <em>garant de l'indépendance de l'autorité judiciaire</em>.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Loi n°58-1270 du 22 déc. 1958</div>
+      <div class="tl-title">Statut des magistrats — <span class="hl" style="color:var(--rose-d)">Inamovibilité<span class="tooltip">Les juges du siège ne peuvent pas être mutés sans leur consentement. Ils sont protégés des pressions politiques.</span></span></div>
+      <div class="tl-body">Les juges du siège bénéficient d'une garantie statutaire majeure : ils sont <strong>inamovibles</strong>, ce qui les protège des pressions politiques.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Institution permanente</div>
+      <div class="tl-title">Conseil Supérieur de la Magistrature (CSM)</div>
+      <div class="tl-body">Veille sur la <strong>nomination</strong>, la <strong>discipline</strong> et la <strong>carrière</strong> des juges. S'assure qu'ils ne soient pas pénalisés pour leurs décisions.</div>
+    </div>
+  </div>
+
+  <div class="recap sr">
+    <div class="recap-title">🧠 À retenir</div>
+    <ul>
+      <li>3 pouvoirs distincts : législatif / exécutif / <strong>judiciaire</strong>.</li>
+      <li>Inamovibilité = le juge ne peut pas être muté contre sa volonté.</li>
+      <li>CSM = gardien de l'indépendance des juges face au politique.</li>
+    </ul>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('jus')">← Justice</button>
+    <button class="pnav-btn primary" onclick="goTab('flash')">Flashcards →</button>
+  </div>
+</div>
+
+<!-- ═══════════ FLASHCARDS ═══════════ -->
+<div class="page" id="page-flash">
+  <div class="page-hero sr">
+    <div class="page-chip">🃏 Mémorisation</div>
+    <h1 class="page-title">Flash<em>cards</em></h1>
+    <p class="page-sub">Clique sur chaque carte pour révéler la définition. Idéal pour tester ta mémoire !</p>
+  </div>
+
+  <p class="flash-hint sr">🃏 <strong>8 cartes</strong> — Clique pour retourner, reclique pour remettre à plat.</p>
+
+  <div class="flash-grid sr">
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">État de droit</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">Système où toutes les personnes et institutions, y compris l'État, sont soumises à la loi. Garantit les libertés individuelles.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">Pyramide de Kelsen</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">Hiérarchie des normes : Constitution → Traités → Lois → Règlements. Théorisée en 1934. Norme inférieure = toujours conforme à la supérieure.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">Inamovibilité</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">Garantie des juges du siège : impossible de les muter sans leur consentement. Protège contre les pressions politiques.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">Bloc de constitutionnalité</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">Ensemble à valeur constitutionnelle : Constitution 1958 + DDHC 1789 + Préambule 1946.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">CSM</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">Conseil Supérieur de la Magistrature. Veille sur la nomination, discipline et carrière des juges. Garantit leur indépendance.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">Aide juridique 1991</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">Loi du 10 juillet 1991 : accès gratuit et confidentiel à des consultations juridiques. Service public de la justice depuis 2016.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">DDHC</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">Déclaration des Droits de l'Homme et du Citoyen (1789). Texte fondateur proclamé lors de la Révolution française. Garantit liberté, égalité, propriété.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-inner">
+        <div class="fc-f"><div class="fc-term">Séparation des pouvoirs</div><div class="fc-tap">↩ cliquer</div></div>
+        <div class="fc-b"><div class="fc-def">3 pouvoirs distincts : législatif (lois), exécutif (gouvernement), judiciaire (justice). Garantit l'impartialité des juges.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('ind')">← Indépendance</button>
+    <button class="pnav-btn primary" onclick="goTab('quiz')">Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══════════ QUIZ ═══════════ -->
+<div class="page" id="page-quiz">
+  <div class="page-hero sr">
+    <div class="page-chip">❓ Quiz</div>
+    <h1 class="page-title">Teste tes <em>connaissances</em></h1>
+    <p class="page-sub">7 questions pour valider ta maîtrise du cours.</p>
+  </div>
+
+  <div class="quiz-box sr">
+    <div class="quiz-hdr">Quiz — L'État de droit</div>
+    <p class="quiz-sub">Une seule bonne réponse par question. Feedback immédiat !</p>
+    <div class="q-prog" id="qprog"></div>
+    <div id="qbox"></div>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('flash')">← Flashcards</button>
+    <button class="pnav-btn primary" onclick="goTab('synth')">Synthèse →</button>
+  </div>
+</div>
+
+<!-- ═══════════ SYNTHÈSE ═══════════ -->
+<div class="page" id="page-synth">
+  <div class="page-hero sr">
+    <div class="page-chip">🔄 Synthèse</div>
+    <h1 class="page-title">Le mécanisme <em>en boucle</em></h1>
+    <p class="page-sub">En résumé, l'État de droit fonctionne comme un cercle vertueux où chaque élément renforce les autres.</p>
+  </div>
+
+  <div class="synth-banner sr">
+    <div class="synth-title">L'État de droit : une boucle vertueuse</div>
+    <div class="synth-sub">Chaque étape renforce et légitime la suivante.</div>
+    <div class="loop-wrap">
+      <div class="loop-item"><span class="li">🗳️</span>Le citoyen élit des représentants</div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-item"><span class="li">📜</span>Les représentants créent la loi</div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-item"><span class="li">🛡️</span>La loi organise la sécurité & protège les libertés</div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-item"><span class="li">⚖️</span>Des juges indépendants garantissent l'accès au droit</div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-item"><span class="li">🔄</span>… et retour au citoyen</div>
+    </div>
+  </div>
+
+  <div class="recap sr" style="margin-top:28px">
+    <div class="recap-title">📌 Les 4 piliers de l'État de droit</div>
+    <ul>
+      <li><strong>Sécurité</strong> — La loi régule les comportements et dissuade la criminalité.</li>
+      <li><strong>Égalité des libertés</strong> — Mêmes droits pour tous, garantis par la Constitution et la hiérarchie des normes.</li>
+      <li><strong>Accès au droit</strong> — Tout citoyen peut se défendre grâce à l'aide juridique.</li>
+      <li><strong>Indépendance judiciaire</strong> — Des juges impartiaux font respecter la loi, même par l'État.</li>
+    </ul>
+  </div>
+
+  <div class="page-nav sr">
+    <button class="pnav-btn" onclick="goTab('quiz')">← Quiz</button>
+    <button class="pnav-btn primary" onclick="goTab('home')">🏠 Accueil</button>
+  </div>
+</div>
+
+<script>
+// ── TABS ──
+const TAB_ORDER = ['home','def','sec','lib','kels','jus','ind','flash','quiz','synth'];
+const TABS_TOTAL = TAB_ORDER.length;
+
+function goTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
+  window.scrollTo({top:0, behavior:'smooth'});
+  updateProgress(id);
+  setTimeout(revealAll, 80);
+}
+
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => goTab(b.dataset.tab)));
+
+// ── PROGRESS BAR ──
+function updateProgress(id) {
+  const idx = TAB_ORDER.indexOf(id);
+  const pct = idx <= 0 ? 0 : Math.round((idx / (TABS_TOTAL - 1)) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ── REVEAL ON ENTER ──
+function revealAll() {
+  document.querySelectorAll('.page.active .sr').forEach((el, i) => {
+    setTimeout(() => el.classList.add('vis'), i * 90);
+  });
+  document.querySelectorAll('.page.active .tl-item').forEach((el, i) => {
+    setTimeout(() => el.classList.add('vis'), 200 + i * 150);
+  });
+}
+setTimeout(revealAll, 100);
+
+// ── GLOW ──
+function glow(e, el) {
+  const r = el.getBoundingClientRect();
+  el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+  el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+}
+
+// ── PYRAMID TOGGLE ──
+function togglePyr(id) {
+  const el = document.getElementById(id);
+  const wasOpen = el.classList.contains('show');
+  document.querySelectorAll('.pyr-info').forEach(e => e.classList.remove('show'));
+  if (!wasOpen) el.classList.add('show');
+}
+
+// ── QUIZ ──
+const QS = [
+  { q:"Qu'est-ce que l'État de droit ?", opts:["Un État dirigé par un roi","Un système où toutes les personnes et institutions sont soumises à la loi","Un État sans constitution","Un régime où les lois ne s'appliquent qu'aux citoyens"], c:1, fb:"✅ L'État de droit = tout le monde soumis à la loi, y compris l'État lui-même." },
+  { q:"Qui a théorisé la Pyramide des normes ?", opts:["Montesquieu","Jean-Jacques Rousseau","Hans Kelsen","Napoléon Bonaparte"], c:2, fb:"✅ Hans Kelsen, juriste autrichien, en 1934." },
+  { q:"Dans la hiérarchie des normes, quelle est la norme suprême ?", opts:["Les traités internationaux","La loi parlementaire","La Constitution","Les décrets présidentiels"], c:2, fb:"✅ La Constitution est au sommet de la pyramide. Tout lui est inférieur." },
+  { q:"Que signifie l'inamovibilité des juges ?", opts:["Ils ne peuvent pas être nommés sans concours","Ils ne peuvent pas être mutés sans leur consentement","Ils sont élus par le peuple","Ils peuvent refuser de juger"], c:1, fb:"✅ Inamovibilité = protection contre les mutations forcées à des fins politiques." },
+  { q:"Quelle institution veille sur l'indépendance des magistrats ?", opts:["Le Parlement","L'Élysée","Le Conseil Supérieur de la Magistrature (CSM)","Le Conseil d'État"], c:2, fb:"✅ Le CSM surveille nomination, discipline et carrière des juges." },
+  { q:"La loi du 10 juillet 1991 concerne :", opts:["La peine de mort","L'aide juridique","La création du CSM","La liberté de la presse"], c:1, fb:"✅ Cette loi garantit un accès gratuit et confidentiel aux services juridiques." },
+  { q:"Quel article de la Constitution fait du Président le garant de l'indépendance judiciaire ?", opts:["Article 3","Article 49-3","Article 64","Article 16"], c:2, fb:"✅ Article 64 de la Constitution de 1958." }
+];
+
+let curQ = 0, score = 0, answered = false;
+
+function renderProg() {
+  document.getElementById('qprog').innerHTML = QS.map((_,i) =>
+    `<div class="q-dot ${i < curQ ? 'done' : i === curQ ? 'cur' : ''}"></div>`
+  ).join('');
+}
+
+function renderQ() {
+  answered = false;
+  renderProg();
+  const q = QS[curQ];
+  document.getElementById('qbox').innerHTML = `
+    <div class="q-text"><span class="qtag">Q${curQ+1}</span>${q.q}</div>
+    <div class="q-opts">${q.opts.map((o,i)=>`<button class="q-opt" onclick="answer(${i})">${o}</button>`).join('')}</div>
+    <div class="q-fb" id="qfb"></div>
+    <button class="q-next" id="qnext" onclick="nextQ()">${curQ < QS.length-1 ? 'Question suivante →' : 'Voir mon score 🎉'}</button>
+  `;
+}
+
+function answer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = QS[curQ];
+  document.querySelectorAll('.q-opt').forEach((o,i) => {
+    if (i === q.c) o.classList.add('ok');
+    else if (i === idx && idx !== q.c) o.classList.add('ko');
+    o.disabled = true;
+  });
+  const fb = document.getElementById('qfb');
+  if (idx === q.c) { score++; fb.classList.add('ok'); } else fb.classList.add('ko');
+  fb.textContent = q.fb;
+  fb.classList.add('show');
+  document.getElementById('qnext').classList.add('show');
+}
+
+function nextQ() {
+  curQ++;
+  if (curQ >= QS.length) showScore(); else renderQ();
+}
+
+function showScore() {
+  renderProg();
+  const pct = Math.round(score / QS.length * 100);
+  const emoji = pct >= 86 ? '🏆' : pct >= 57 ? '👍' : '📚';
+  const msg = pct >= 86 ? 'Excellent ! Tu maîtrises le cours.' : pct >= 57 ? 'Bien joué ! Quelques notions à revoir.' : 'Continue à réviser — tu vas y arriver !';
+  document.getElementById('qbox').innerHTML = `
+    <div class="q-score">
+      <div style="font-size:3.5rem;margin-bottom:12px">${emoji}</div>
+      <div class="q-score-num">${score} / ${QS.length}</div>
+      <div class="q-score-lbl">${msg}</div>
+      <button class="q-next show" onclick="restartQuiz()">🔁 Recommencer</button>
+    </div>
+  `;
+}
+
+function restartQuiz() { curQ = 0; score = 0; renderQ(); }
+
+renderQ();
+</script>
+</body>
+</html>
